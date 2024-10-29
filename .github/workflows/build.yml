@@ -31,11 +31,18 @@ jobs:
         with:
           name: error-reports-${{ matrix.os }}
           path: ${{ github.workspace }}/desktop/build/reports
-      - name: cache nodes dependencies
-        uses: actions/upload-artifact@v3
+      - name: Cache nodes dependencies
+        # Verify the contents of .localnet before uploading it
+      - name: Verify .localnet Contents
+        run: |
+          echo "Listing contents of .localnet"
+          ls -R ${{ github.workspace }}/.localnet
+      - uses: actions/upload-artifact@v3
+        # Only upload if .localnet exists and contains files
+        if: success() && "[ -d ${{ github.workspace }}/.localnet ] && [ $(ls -A ${{ github.workspace }}/.localnet) ]"
         with:
           name: cached-localnet
-          path: .localnet
+          path: ${{ github.workspace }}/.localnet
       - name: Install dependencies
         if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
@@ -138,3 +145,4 @@ jobs:
         with:
           name: haveno-linux-flatpak
           path: ${{ github.workspace }}/release-linux-flatpak
+
