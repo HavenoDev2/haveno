@@ -35,7 +35,7 @@ jobs:
         # Verify the contents of .localnet before uploading it
       - name: Verify .localnet Contents
         run: |
-          echo "Listing contents of .localnet"
+          echo "Listing contents of .localnet to check"
           ls -R ${{ github.workspace }}/.localnet
       - uses: actions/upload-artifact@v3
         # Only upload if .localnet exists and contains files
